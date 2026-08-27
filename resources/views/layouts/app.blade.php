@@ -120,6 +120,58 @@
             color: var(--primary);
         }
 
+        /* 下拉選單容器 */
+        .dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-toggle {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: background 0.18s, color 0.18s;
+            white-space: nowrap;
+        }
+
+        .dropdown-toggle:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        /* 預設隱藏選單 */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #fff;   /* 配合你的 nav 背景色調整 */
+            min-width: 120px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            z-index: 999;
+            padding: 4px 0;
+        }
+
+        /* hover 時顯示 */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 8px 16px;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f5f5f5;
+        }
+
         .navbar-right {
             display: flex;
             align-items: center;
@@ -285,17 +337,48 @@
             background: var(--bg-page);
         }
 
+        /* RWD 區塊外面，全域預設 */
+        .mobile-nav {
+            display: none;
+        }
+
         /* ===== RWD ===== */
         @media screen and (max-width: 768px) {
             html, body { overflow: visible; height: auto; }
             .nav-links { display: none; }
-
             .hamburger-btn { display: flex; align-items: center; justify-content: center; }
 
             .layout {
                 flex-direction: column;
                 height: auto;
                 overflow: visible;
+            }
+
+            /* mobile-nav 預設隱藏，點漢堡後顯示 */
+            .mobile-nav {
+                display: none;
+                background: var(--bg-white);
+                border-bottom: 1px solid var(--border);
+                padding: 4px 16px 8px;
+            }
+
+            /* ← 這條是關鍵，直接對 .mobile-nav.show-menu 作用 */
+            .mobile-nav.show-menu {
+                display: block;
+            }
+
+            .mobile-nav a {
+                display: block;
+                padding: 10px 0;
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-muted);
+                text-decoration: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .mobile-nav a:last-child {
+                border-bottom: none;
             }
 
             .sidebar {
@@ -330,6 +413,14 @@
             <a href="lesson0">單元學習</a>
             <a href="/practice">程式實作</a>
             <a href="/quiz">互動測驗</a>
+
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle">問卷填寫 ▾</a>
+                <div class="dropdown-menu">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSe_MYSv8lCKNYeYuSAoZvLcTWGhs24YUNja7B6ZDwa0vGYAqg/viewform?usp=header" target="_blank" rel="noreferrer noopener">前測問卷</a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScLvYXYh6KnviLmKy5f0TrxMtlZnRnVl-ggNBzrCkcMMEZU1g/viewform?usp=publish-editor" target="_blank" rel="noreferrer noopener">後測問卷</a>
+                </div>
+            </div>
         </nav>
 
         <div class="navbar-right">
@@ -346,6 +437,15 @@
             @endif
         </div>
     </header>
+
+    <div class="mobile-nav">
+        <a href="/">首頁</a>
+        <a href="/lesson0">單元學習</a>
+        <a href="/practice">程式實作</a>
+        <a href="/quiz">互動測驗</a>
+        <a href="/survey/pre">前測問卷</a>
+        <a href="/survey/post">後測問卷</a>
+    </div>
 
     <div class="layout">
         <nav class="sidebar" id="sidebar">
@@ -439,10 +539,9 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // ===== 漢堡選單 =====
-            const hamburgerBtn = document.getElementById('hamburger-btn');
-            const sidebar = document.getElementById('sidebar');
-            hamburgerBtn.addEventListener('click', function () {
-                sidebar.classList.toggle('show-menu');
+            document.getElementById('hamburger-btn').addEventListener('click', function () {
+                document.getElementById('sidebar').classList.toggle('show-menu');
+                document.querySelector('.mobile-nav').classList.toggle('show-menu');
             });
 
             // ===== 自動標記 active 連結 =====
