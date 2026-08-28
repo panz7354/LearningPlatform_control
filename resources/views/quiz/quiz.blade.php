@@ -512,19 +512,38 @@
     const totalQuestions = {{ count($questions) }};
     let answeredCount = 0;
     let correctCount  = 0;
-    const answered    = {};  // 記錄哪些題已作答
+    const answered    = {};
+    let quizResultId  = null;  // 存分數後從後端拿回來
 
     // ===== 更新進度條 =====
     function updateProgress() {
         const pct = (answeredCount / totalQuestions) * 100;
         document.getElementById('progress-bar').style.width = pct + '%';
         if (answeredCount === totalQuestions) {
-            setTimeout(showEffortScale, 600);
+            setTimeout(saveResultThenShowScale, 600);  // ← 改這裡
         }
     }
 
-    // ===== 顯示心智努力量表 =====
-    function showEffortScale() {
+    // ===== 答完題：先存分數，拿到 result_id 後再顯示量表 =====
+    async function saveResultThenShowScale() {
+        const pct = Math.round((correctCount / totalQuestions) * 100);
+
+        try {
+            const res = await fetch(`/quiz/${unit}/result`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ score: pct }),
+            });
+            const data = await res.json();
+            quizResultId = data.result_id ?? null;
+        } catch (e) {
+            console.error('分數儲存失敗', e);
+        }
+
+        // result_id 拿到後才顯示量表
         const effortCard = document.getElementById('effort-card');
         effortCard.classList.add('show');
         effortCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -542,66 +561,57 @@
     });
 
     // ===== 心智努力量表：送出 =====
-    function submitEffort() {
+    async function submitEffort() {
         if (!selectedEffort) return;
 
-        // 鎖定量表
         document.querySelectorAll('.effort-radio-btn').forEach(b => b.disabled = true);
         document.getElementById('effort-submit-btn').disabled = true;
 
-        async function submitEffort() {
-            if (!selectedEffort) return;
-            document.querySelectorAll('.effort-radio-btn').forEach(b => b.disabled = true);
-            document.getElementById('effort-submit-btn').disabled = true;
-
+        try {
             await fetch(`/quiz/${unit}/effort`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
-                body: JSON.stringify({ effort_score: selectedEffort }),
+                body: JSON.stringify({
+                    effort_score: selectedEffort,
+                    result_id: quizResultId,  // 這時一定有值了
+                }),
             });
-
-            showResult();
+        } catch (e) {
+            console.error('認知負荷儲存失敗', e);
         }
 
-        showResult();
+        showResult();  // effort 存完才顯示結果
     }
 
     // ===== 是非 / 選擇題：作答 =====
     function submitAnswer(qid, selected, correct, clickedBtn) {
-        if (answered[qid]) return;   // 已答過，不重複
+        if (answered[qid]) return;
         answered[qid] = true;
         answeredCount++;
 
-        // TF 題：直接比對全文（是/否）
-        // MC 題：比對選項開頭字母（A/B/C）
         const isCorrect = selected.trim() === correct.trim() ||
                   selected.trim().charAt(0) === correct.trim().charAt(0);
 
-        // 鎖定所有選項
         const btns = document.querySelectorAll(`#options-${qid} .option-btn`);
         btns.forEach(btn => {
             btn.disabled = true;
             const val = btn.getAttribute('data-value').trim();
-            // 標記正確答案按鈕
             if (val.trim() === correct.trim() || val.trim().charAt(0) === correct.trim().charAt(0)) {
                 btn.classList.add('correct-ans');
             }
         });
 
-        // 標記選錯的按鈕
         if (!isCorrect) {
             clickedBtn.classList.remove('selected');
             clickedBtn.classList.add('wrong-ans');
         }
 
-        // 卡片背景
         const card = document.getElementById(`card-${qid}`);
         card.classList.add(isCorrect ? 'correct' : 'wrong');
 
-        // 回饋文字
         const fb = document.getElementById(`feedback-${qid}`);
         fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
         fb.textContent = isCorrect ? '✅ 答對了！' : `❌ 答錯了！正確答案是：${correct}`;
@@ -612,7 +622,6 @@
 
     // ===== 拖曳排序題 =====
     let dragSrcEl = null;
-
     document.querySelectorAll('.sort-item').forEach(item => {
         item.addEventListener('dragstart', function(e) {
             dragSrcEl = this;
@@ -638,7 +647,6 @@
                 const items = [...container.querySelectorAll('.sort-item')];
                 const srcIdx  = items.indexOf(dragSrcEl);
                 const destIdx = items.indexOf(this);
-                // 插入到目標位置
                 if (srcIdx < destIdx) {
                     container.insertBefore(dragSrcEl, this.nextSibling);
                 } else {
@@ -655,26 +663,20 @@
         answered[qid] = true;
         answeredCount++;
 
-        // 讀取目前順序
         const container  = document.getElementById(`sort-${qid}`);
         const items      = container.querySelectorAll('.sort-item');
         const userAnswer = [...items].map(i => i.getAttribute('data-letter')).join(';');
         const isCorrect  = userAnswer === correct.trim();
 
-        // 鎖定拖曳
         items.forEach(item => {
             item.setAttribute('draggable', 'false');
             item.style.cursor = 'default';
             item.classList.add(isCorrect ? 'correct-item' : 'wrong-item');
         });
 
-        // 鎖定按鈕
         document.getElementById(`confirm-${qid}`).disabled = true;
-
-        // 卡片背景
         document.getElementById(`card-${qid}`).classList.add(isCorrect ? 'correct' : 'wrong');
 
-        // 回饋
         const fb = document.getElementById(`feedback-${qid}`);
         fb.classList.add('show', isCorrect ? 'correct' : 'wrong');
         const correctLabels = correct.split(';').join(' → ');
@@ -686,13 +688,12 @@
         updateProgress();
     }
 
-    // ===== 顯示分數 =====
-    async function showResult() {
+    // ===== 顯示分數（純 UI，不再發 fetch） =====
+    function showResult() {
+        const pct = Math.round((correctCount / totalQuestions) * 100);
         const resultCard = document.getElementById('result-card');
         resultCard.classList.add('show');
         resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-        const pct = Math.round((correctCount / totalQuestions) * 100);
 
         document.getElementById('result-score').innerHTML =
             `${correctCount} <span>/ ${totalQuestions}</span>`;
@@ -710,20 +711,6 @@
         }
         document.getElementById('result-msg').textContent = msg;
         document.getElementById('result-sub').textContent = sub;
-
-        // ===== 送分數到後端儲存 =====
-        try {
-            await fetch(`/quiz/${unit}/result`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({ score: pct }),
-            });
-        } catch (e) {
-            console.error('分數儲存失敗', e);
-        }
     }
 
     // ===== 重新作答 =====
@@ -731,7 +718,7 @@
         location.reload();
     }
 
-    // 用事件委派取代 onclick，避免引號衝突
+    // ===== 事件委派 =====
     document.querySelectorAll('.options-group').forEach(group => {
         group.addEventListener('click', function(e) {
             const btn = e.target.closest('.option-btn');
