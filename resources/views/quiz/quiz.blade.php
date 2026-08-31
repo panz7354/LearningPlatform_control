@@ -501,7 +501,7 @@
         <div class="result-score" id="result-score">0 <span>/ {{ count($questions) }}</span></div>
         <div class="result-msg" id="result-msg"></div>
         <div class="result-sub" id="result-sub"></div>
-        <button class="retry-btn" onclick="retryQuiz()">重新作答</button>
+        <button class="retry-btn" onclick="retryQuiz()">回章節列表</button>
     </div>
 
 </div>
@@ -511,23 +511,25 @@
     const unit           = {{ $unit }};
     const totalQuestions = {{ count($questions) }};
     let answeredCount = 0;
-    let correctCount  = 0;
+    let correctCount  = 0;          // 僅供作答當下的即時特效使用，不是最終成績
     const answered    = {};
-    let quizResultId  = null;  // 存分數後從後端拿回來
+    const userAnswers = {};         // qid -> 使用者的作答內容，送給後端重新計分
+    let quizResultId  = null;       // 存分數後從後端拿回來
+    let finalScore    = 0;          // 後端算出來的正式分數
+    let finalCorrect  = 0;          // 後端算出來的正式答對題數
 
     // ===== 更新進度條 =====
     function updateProgress() {
         const pct = (answeredCount / totalQuestions) * 100;
         document.getElementById('progress-bar').style.width = pct + '%';
         if (answeredCount === totalQuestions) {
-            setTimeout(saveResultThenShowScale, 600);  // ← 改這裡
+            setTimeout(saveResultThenShowScale, 600);
         }
     }
 
-    // ===== 答完題：先存分數，拿到 result_id 後再顯示量表 =====
+    // ===== 答完題：把作答內容送後端重新計分，拿到 result_id 後再顯示量表 =====
+    // 分數一律由後端根據 quiz_page 的正確答案重新計算，前端算的分數只當作答題當下的即時特效
     async function saveResultThenShowScale() {
-        const pct = Math.round((correctCount / totalQuestions) * 100);
-
         try {
             const res = await fetch(`/quiz/${unit}/result`, {
                 method: 'POST',
@@ -535,12 +537,24 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
-                body: JSON.stringify({ score: pct }),
+                body: JSON.stringify({ answers: userAnswers }),
             });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                alert(err.error || '分數儲存失敗，請重新整理頁面再試一次');
+                window.location.href = '/quiz';
+                return;
+            }
+
             const data = await res.json();
             quizResultId = data.result_id ?? null;
+            finalScore   = data.score ?? 0;
+            finalCorrect = data.correct ?? correctCount;
         } catch (e) {
             console.error('分數儲存失敗', e);
+            alert('網路異常，分數儲存失敗，請重新整理頁面再試一次');
+            return;
         }
 
         // result_id 拿到後才顯示量表
@@ -586,11 +600,12 @@
         showResult();  // effort 存完才顯示結果
     }
 
-    // ===== 是非 / 選擇題：作答 =====
+    // ===== 是非 / 選擇題：作答（即時特效用，正式計分在後端） =====
     function submitAnswer(qid, selected, correct, clickedBtn) {
         if (answered[qid]) return;
         answered[qid] = true;
         answeredCount++;
+        userAnswers[qid] = selected;
 
         const isCorrect = selected.trim() === correct.trim() ||
                   selected.trim().charAt(0) === correct.trim().charAt(0);
@@ -657,7 +672,7 @@
         });
     });
 
-    // ===== 排序題：確認答案 =====
+    // ===== 排序題：確認答案（即時特效用，正式計分在後端） =====
     function submitSort(qid, correct) {
         if (answered[qid]) return;
         answered[qid] = true;
@@ -666,6 +681,7 @@
         const container  = document.getElementById(`sort-${qid}`);
         const items      = container.querySelectorAll('.sort-item');
         const userAnswer = [...items].map(i => i.getAttribute('data-letter')).join(';');
+        userAnswers[qid] = userAnswer;
         const isCorrect  = userAnswer === correct.trim();
 
         items.forEach(item => {
@@ -688,15 +704,15 @@
         updateProgress();
     }
 
-    // ===== 顯示分數（純 UI，不再發 fetch） =====
+    // ===== 顯示分數（使用後端回傳的正式成績，不是前端算的） =====
     function showResult() {
-        const pct = Math.round((correctCount / totalQuestions) * 100);
+        const pct = Math.round((finalCorrect / totalQuestions) * 100);
         const resultCard = document.getElementById('result-card');
         resultCard.classList.add('show');
         resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         document.getElementById('result-score').innerHTML =
-            `${correctCount} <span>/ ${totalQuestions}</span>`;
+            `${finalCorrect} <span>/ ${totalQuestions}</span>`;
 
         let msg, sub;
         if (pct === 100) {
@@ -713,9 +729,10 @@
         document.getElementById('result-sub').textContent = sub;
     }
 
-    // ===== 重新作答 =====
+    // ===== 回章節列表 =====
+    // 每章只能測驗一次，所以這裡改成導回章節列表，而不是重新整理讓使用者再作答一次
     function retryQuiz() {
-        location.reload();
+        window.location.href = '/quiz';
     }
 
     // ===== 事件委派 =====

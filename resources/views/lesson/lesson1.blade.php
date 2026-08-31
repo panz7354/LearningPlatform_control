@@ -10,13 +10,13 @@
     {{-- ===== 標題列 ===== --}}
     <div class="lesson-header">
         <h1>第 1 章 數值、字串與串列處理</h1>
-        <div class="audio-wrap">
+        {{-- <div class="audio-wrap">
             <span>範例音檔</span>
             <audio controls>
                 <source src="{{ asset('audio/1_star.mp3') }}" type="audio/mpeg">
                 您的瀏覽器不支援播放
             </audio>
-        </div>
+        </div> --}}
     </div>
 
     {{-- ===== 學習目標 ===== --}}

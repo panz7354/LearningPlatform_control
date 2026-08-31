@@ -352,7 +352,7 @@
                 ✅ 送出答案
             </button>
             <button class="retry-btn" id="retry-btn" onclick="retryPractice()">
-                🔄 重新作答
+                🔙 回章節列表
             </button>
         </div>
     </div>
@@ -436,9 +436,10 @@
         document.getElementById('retry-btn').classList.add('show');
     }
 
-    // ===== 重新作答 =====
+    // ===== 回章節列表 =====
+    // 每章只能作答一次，所以這裡改成導回章節列表，而不是重新整理讓使用者再作答一次
     function retryPractice() {
-        location.reload();
+        window.location.href = '/practice';
     }
 
     // ===== Enter 鍵跳到下一格 =====

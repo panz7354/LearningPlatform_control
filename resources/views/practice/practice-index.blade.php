@@ -41,6 +41,18 @@
         line-height: 1.6;
     }
 
+    /* ===== 錯誤提示 ===== */
+    .flash-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
     /* ===== 章節標題 ===== */
     .section-title {
         font-size: 13px;
@@ -82,6 +94,11 @@
         cursor: not-allowed;
         pointer-events: none;
     }
+    .chapter-card.locked {
+        opacity: 0.55;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
 
     .card-top {
         display: flex;
@@ -105,6 +122,7 @@
     .badge-done    { background: #ede9fe; color: #6d28d9; }
     .badge-pending { background: #f1f5f9; color: #64748b; }
     .badge-empty   { background: #fef3c7; color: #92400e; }
+    .badge-locked  { background: #f1f5f9; color: #94a3b8; }
 
     .card-title { font-size: 15px; font-weight: 700; color: #1e293b; line-height: 1.4; }
 
@@ -161,6 +179,11 @@
 @section('content')
 <div class="practice-index-wrap">
 
+    {{-- ===== 錯誤提示（例如點了還沒解鎖的章節、或已作答過的章節） ===== --}}
+    @if(session('error'))
+    <div class="flash-error">⚠️ {{ session('error') }}</div>
+    @endif
+
     {{-- ===== 頁首 ===== --}}
     <div class="practice-index-hero">
         <div>
@@ -170,24 +193,30 @@
     </div>
 
     {{-- ===== 章節卡片 ===== --}}
-    <p class="section-title">選擇章節</p>
+    <p class="section-title">選擇章節（需登入才能作答，每章只能作答一次，需完成前一章才能解鎖下一章）</p>
 
     <div class="chapter-grid">
         @foreach($chapters as $ch)
         @php
             $hasContent = $ch['has_content'];
+            $locked     = $ch['locked'] ?? false;
             $hasDone    = $ch['score'] !== null;
             $score      = $ch['score'];
             $pct        = ($hasDone) ? $score : 0;
+            $clickable  = $hasContent && !$locked;
         @endphp
 
-        <a href="{{ $hasContent ? '/practice/' . $ch['unit'] : '#' }}"
-           class="chapter-card {{ $hasContent ? '' : 'no-questions' }}">
+        <a href="{{ $clickable ? '/practice/' . $ch['unit'] : '#' }}"
+           class="chapter-card
+                  {{ !$hasContent ? 'no-questions' : '' }}
+                  {{ $hasContent && $locked ? 'locked' : '' }}">
 
             <div class="card-top">
                 <span class="chapter-label">第 {{ $ch['unit'] }} 章</span>
                 @if(!$hasContent)
                     <span class="status-badge badge-empty">準備中</span>
+                @elseif($locked)
+                    <span class="status-badge badge-locked">🔒 尚未解鎖</span>
                 @elseif($hasDone)
                     <span class="status-badge badge-done">已完成</span>
                 @else
@@ -199,6 +228,8 @@
 
             @if(!$hasContent)
                 <div class="card-score not-done">尚無題目</div>
+            @elseif($locked)
+                <div class="card-score not-done">請先完成第 {{ $ch['unit'] - 1 }} 章</div>
             @elseif($hasDone)
                 <div class="card-score">
                     得分：<span class="score-val">{{ $score }} 分</span>
@@ -212,7 +243,7 @@
                      style="width: {{ $pct }}%"></div>
             </div>
 
-            @if($hasContent)
+            @if($clickable)
                 <span class="card-arrow">→</span>
             @endif
 

@@ -410,7 +410,7 @@
 
         <nav class="nav-links">
             <a href="/">首頁</a>
-            <a href="lesson0">單元學習</a>
+            <a href="/lesson1">單元學習</a>
             <a href="/practice">程式實作</a>
             <a href="/quiz">互動測驗</a>
 
@@ -440,25 +440,31 @@
 
     <div class="mobile-nav">
         <a href="/">首頁</a>
-        <a href="/lesson0">單元學習</a>
+        <a href="/lesson1">單元學習</a>
         <a href="/practice">程式實作</a>
         <a href="/quiz">互動測驗</a>
-        <a href="/survey/pre">前測問卷</a>
-        <a href="/survey/post">後測問卷</a>
+
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle">問卷填寫 ▾</a>
+            <div class="dropdown-menu">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe_MYSv8lCKNYeYuSAoZvLcTWGhs24YUNja7B6ZDwa0vGYAqg/viewform?usp=header" target="_blank" rel="noreferrer noopener">前測問卷</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScLvYXYh6KnviLmKy5f0TrxMtlZnRnVl-ggNBzrCkcMMEZU1g/viewform?usp=publish-editor" target="_blank" rel="noreferrer noopener">後測問卷</a>
+            </div>
+        </div>
     </div>
 
     <div class="layout">
         <nav class="sidebar" id="sidebar">
             <p class="sidebar-section-title">課程目錄</p>
             <ul class="nav-menu">
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <div class="nav-header">
                         <a href="lesson0">
                             <span class="nav-chapter-num">0</span>
                             Pygame 套件介紹
                         </a>
                     </div>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <div class="nav-header">
                         <a href="lesson1">
