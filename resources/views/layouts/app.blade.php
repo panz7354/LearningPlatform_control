@@ -410,7 +410,7 @@
 
         <nav class="nav-links">
             <a href="/">首頁</a>
-            <a href="/lesson1">單元學習</a>
+            <a href="/lesson0">單元學習</a>
             <a href="/practice">程式實作</a>
             <a href="/quiz">互動測驗</a>
 
@@ -440,7 +440,7 @@
 
     <div class="mobile-nav">
         <a href="/">首頁</a>
-        <a href="/lesson1">單元學習</a>
+        <a href="/lesson0">單元學習</a>
         <a href="/practice">程式實作</a>
         <a href="/quiz">互動測驗</a>
 
@@ -457,14 +457,14 @@
         <nav class="sidebar" id="sidebar">
             <p class="sidebar-section-title">課程目錄</p>
             <ul class="nav-menu">
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <div class="nav-header">
                         <a href="lesson0">
                             <span class="nav-chapter-num">0</span>
                             Pygame 套件介紹
                         </a>
                     </div>
-                </li> --}}
+                </li>
                 <li class="nav-item">
                     <div class="nav-header">
                         <a href="lesson1">

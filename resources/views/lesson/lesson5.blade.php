@@ -5,11 +5,11 @@
 @endsection
 
 @section('content')
-<div class="lesson-wrap">
+<div class="lesson-wrap" data-chapter="5">
 
     {{-- ===== 標題列 ===== --}}
     <div class="lesson-header">
-        <h1>第 5 章 檔案、異常處理與模組</h1>
+        <h1>第 5 章　檔案、異常處理與模組</h1>
         <div class="audio-wrap">
             <span>範例音檔</span>
             <audio controls>
@@ -18,6 +18,9 @@
             </audio>
         </div>
     </div>
+
+    {{-- ===== 章節色條 ===== --}}
+    <div class="chap-accent-bar"></div>
 
     {{-- ===== 學習目標 ===== --}}
     <div class="lesson-goals">
@@ -43,248 +46,257 @@
             • 儲存程式結果 💾
         </p>
         <p>
-            就像我們平常使用：<br>
-            • 記事本<br>
-            • Word<br>
-            • 歌詞檔<br>
-            • 音樂播放清單<br><br>
+            就像我們平常使用：記事本、Word、歌詞檔、音樂播放清單，<br>
             Python 也可以幫我們自動開啟與操作這些檔案。
         </p>
 
-        <h5>🎵 常用情境小舉例</h5>
-        <p>
-            可以把《小星星》的音符：<br>
-            C(do) C(do) G(sol) G(sol) A(la) A(la) G(sol)<br>
-            存到文字檔中，之後再讓程式讀取並播放旋律。
-        </p>
+        <div class="music-card">
+            <span class="music-card-icon">🎵</span>
+            <div class="music-card-body">
+                <p class="music-card-title">常用情境小舉例</p>
+                <p>可以把《小星星》的音符：<br>
+                C(do) C(do) G(sol) G(sol) A(la) A(la) G(sol)<br>
+                存到文字檔中，之後再讓程式讀取並播放旋律。</p>
+            </div>
+        </div>
 
         <h4>(二) 開啟檔案：open()</h4>
-        <p>
-            使用 <code>open()</code> 可以開啟檔案。<br><br>
-            <strong>基本語法</strong><br>
-            <code>檔案變數 = open("檔名", "模式")</code><br><br>
-            例如：<br>
-            <code>file = open("music.txt", "r")</code><br><br>
-            代表：<br>
-            • 開啟 music.txt<br>
-            • 使用 r 模式（read，讀取模式）
-        </p>
+        <p>使用 <code>open()</code> 可以開啟檔案。</p>
+        <p><strong>基本語法：</strong></p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-nm">檔案變數</span> = <span class="hl-kw">open</span>(<span class="hl-st">"檔名"</span>, <span class="hl-st">"模式"</span>)
+
+<span class="hl-cm"># 例如：</span>
+<span class="hl-nm">file</span> = <span class="hl-kw">open</span>(<span class="hl-st">"music.txt"</span>, <span class="hl-st">"r"</span>)</pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>開啟 music.txt，使用 <code>r</code> 模式（read，讀取模式）。</p>
+        </div>
 
         <h4>(三) 常見檔案模式</h4>
-        <p>
-            <strong>"r"</strong>：讀取檔案【read】<br>
-            <strong>"w"</strong>：寫入檔案（會覆蓋原內容）【write】<br>
-            <strong>"a"</strong>：附加內容（加在最後）【append】
-        </p>
+        <table>
+            <tr><th>模式</th><th>說明</th></tr>
+            <tr><td>"r"</td><td>讀取檔案【read】</td></tr>
+            <tr><td>"w"</td><td>寫入檔案（會覆蓋原內容）【write】</td></tr>
+            <tr><td>"a"</td><td>附加內容（加在最後）【append】</td></tr>
+        </table>
 
-        <h5>🎵 音樂情境理解</h5>
-        <p>
-            假設有一份「音樂歌詞本」：<br><br>
-            <strong>"r" 讀取模式</strong><br>
-            👉 把歌詞打開來看<br><br>
-            <strong>"w" 寫入模式</strong><br>
-            👉 把原本歌詞全部擦掉重新寫<br><br>
-            <strong>"a" 附加模式</strong><br>
-            👉 在最後再加一段新歌詞
-        </p>
+        <div class="music-card">
+            <span class="music-card-icon">🎵</span>
+            <div class="music-card-body">
+                <p class="music-card-title">音樂情境理解</p>
+                <p>假設有一份「音樂歌詞本」：<br><br>
+                <strong>"r" 讀取模式</strong>　👉 把歌詞打開來看<br>
+                <strong>"w" 寫入模式</strong>　👉 把原本歌詞全部擦掉重新寫<br>
+                <strong>"a" 附加模式</strong>　👉 在最後再加一段新歌詞</p>
+            </div>
+        </div>
 
         <h4>(四) 讀取檔案內容</h4>
-        <p>
-            <strong>read()</strong><br>
-            使用 <code>read()</code> 可以一次讀取全部內容。<br>
-            如下程式碼：
-        </p>
-        <pre>file = open("music.txt", "r") \開啟檔案，並讀取內容
-data = file.read() \將剛才讀取的內容，存入變數data裡面
-print(data) \顯示變數data의內容</pre>
-        <p>
-            邏輯說明：<br>
-            開啟檔案<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            讀取內容<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            將內容存入變數<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            顯示內容
-        </p>
+        <p>使用 <code>read()</code> 可以一次讀取全部內容。如下程式碼：</p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-nm">file</span> = <span class="hl-kw">open</span>(<span class="hl-st">"music.txt"</span>, <span class="hl-st">"r"</span>)  <span class="hl-cm"># 開啟檔案</span>
+<span class="hl-nm">data</span> = file.<span class="hl-kw">read</span>()              <span class="hl-cm"># 讀取內容存入 data</span>
+<span class="hl-kw">print</span>(data)                      <span class="hl-cm"># 顯示內容</span></pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>① 開啟檔案　→　② 讀取內容　→　③ 將內容存入變數　→　④ 顯示內容</p>
+        </div>
 
         <h4>(五) 寫入檔案內容</h4>
-        <p>
-            使用 <code>write()</code> 可以把資料寫入檔案。如下程式碼：
-        </p>
-        <pre>file = open("music.txt", "w") \開啟檔案music.txt（寫入模式"w"）
-file.write("C D E F G") \把文字C D E F G，寫入檔案，檔案內容被儲存</pre>
-        <p>
-            邏輯說明：<br>
-            開啟檔案（寫入模式）<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            把文字寫入檔案<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            檔案內容被儲存
-        </p>
+        <p>使用 <code>write()</code> 可以把資料寫入檔案。如下程式碼：</p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-nm">file</span> = <span class="hl-kw">open</span>(<span class="hl-st">"music.txt"</span>, <span class="hl-st">"w"</span>)  <span class="hl-cm"># 開啟（寫入模式）</span>
+file.<span class="hl-kw">write</span>(<span class="hl-st">"C D E F G"</span>)          <span class="hl-cm"># 把文字寫入檔案</span></pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>① 開啟檔案（寫入模式）　→　② 把文字寫入檔案　→　③ 檔案內容被儲存</p>
+        </div>
 
         <h4>(六) 關閉檔案：close()</h4>
-        <p>
-            檔案使用完後，要記得關閉。如下程式碼：
-        </p>
-        <pre>file.close()</pre>
-        <p>
-            為什麼要關閉檔案？<br>
-            就像：<br>
-            🎵 音樂播放器播放完歌曲後<br>
-            要記得關掉播放器。<br><br>
-            否則可能：<br>
-            • 資料沒有正確儲存<br>
-            • 檔案被占用<br>
-            • 程式發生錯誤
-        </p>
+        <p>檔案使用完後，要記得關閉。如下程式碼：</p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre>file.<span class="hl-kw">close</span>()</pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>就像 🎵 音樂播放器播放完歌曲後要記得關掉。</p>
+            <p>否則可能：資料沒有正確儲存、檔案被占用、程式發生錯誤。</p>
+        </div>
 
         <h4>(七) 完整檔案處理流程</h4>
-        <p>如下程式碼：</p>
-        <pre># 開啟檔案，用w寫入模式
-file = open("music.txt", "w")
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-cm"># 開啟檔案（寫入模式）</span>
+<span class="hl-nm">file</span> = <span class="hl-kw">open</span>(<span class="hl-st">"music.txt"</span>, <span class="hl-st">"w"</span>)
 
-# 寫入內容Hello Music
-file.write("Hello Music")
+<span class="hl-cm"># 寫入內容</span>
+file.<span class="hl-kw">write</span>(<span class="hl-st">"Hello Music"</span>)
 
-# 關閉檔案
-file.close()</pre>
-        <h5>📌 檔案處理流程圖</h5>
-        <p>
-            open()<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            讀取 / 寫入<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            close()
-        </p>
+<span class="hl-cm"># 關閉檔案</span>
+file.<span class="hl-kw">close</span>()</pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">檔案處理流程</div>
+            <p>① open()　→　② 讀取 / 寫入　→　③ close()</p>
+        </div>
 
         <hr>
 
         <h3>範例程式說明</h3>
 
-        <h4>範例(一)：建立music檔案並寫入旋律 🎵</h4>
-        <p>
-            請撰寫一段程式，完成以下功能：<br><br>
-              1. 開啟一個檔案 music.txt，使用寫入模式（"w"）<br>
-              2. 將《小星星》前四個音符寫入檔案：<br>
-                C C G G<br>
-              3. 關閉檔案<br>
-              4. 顯示「檔案寫入完成」
-        </p>
-        <pre>參考程式：
+        <div class="example-wrap">
+            <div class="example-head">範例 (一)：建立 music 檔案並寫入旋律 🎵</div>
+            <div class="example-body">
+                <p>請撰寫一段程式，完成以下功能：</p>
+                <ol>
+                    <li>開啟一個檔案 music.txt，使用寫入模式（"w"）</li>
+                    <li>將《小星星》前四個音符寫入檔案：C C G G</li>
+                    <li>關閉檔案</li>
+                    <li>顯示「檔案寫入完成」</li>
+                </ol>
+                <div class="code-block" style="margin-top:14px">
+                    <div class="code-block-header">
+                        <div class="code-block-dots">
+                            <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                        </div>
+                        <span class="code-block-lang">參考程式</span>
+                    </div>
+                    <pre><span class="hl-cm"># 【第1題】開啟 music.txt（寫入模式）</span>
+<span class="hl-nm">file</span> = <span class="hl-kw">open</span>(<span class="hl-st">"music.txt"</span>, <span class="hl-st">"w"</span>)
 
-# 【第1題】
-# 使用 open() 開啟 music.txt 檔案
-# "w" 代表寫入模式（write）
-file = open("music.txt", "w")
+<span class="hl-cm"># 【第2題】寫入《小星星》前四個音符</span>
+file.<span class="hl-kw">write</span>(<span class="hl-st">"C C G G"</span>)
 
-# 【第2題】
-# 使用 write() 將《小星星》前四個音符寫入檔案
-# 寫入內容：C C G G
-file.write("C C G G")
+<span class="hl-cm"># 【第3題】關閉檔案，確保資料正確儲存</span>
+file.<span class="hl-kw">close</span>()
 
-# 【第3題】
-# 使用 close() 關閉檔案
-# 確保資料正確儲存
-file.close()
-
-# 【第4題】
-# 顯示完成訊息
-print("檔案寫入完成")</pre>
-        <p><strong>程式執行結果：</strong></p>
-        <pre>檔案寫入完成
+<span class="hl-cm"># 【第4題】顯示完成訊息</span>
+<span class="hl-kw">print</span>(<span class="hl-st">"檔案寫入完成"</span>)</pre>
+                </div>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果</div>
+                    <div class="output-block">檔案寫入完成
 
 📁 music.txt 檔案內容：
-C C G G</pre>
+C C G G</div>
+                </div>
+            </div>
+        </div>
 
-        <h4>範例(二)：播放《給愛麗絲》旋律</h4>
-        <img src="{{ asset('img/Alice.png') }}" alt="給愛麗絲五線譜">
-        <p>
-            此行五線譜是《給愛麗絲》的第一句旋律，此行音符為Mi(高) Re(高) Mi(高) Re(高) Mi(高) Si Re(高) Do(高) La<br><br>
-            請撰寫一段程式，完成以下功能：<br><br>
-              1. 開啟檔案 music.txt<br>
-              2. 讀取檔案中的旋律內容<br>
-              3. 顯示讀取到的旋律<br>
-              4. 播放《給愛麗絲》第一句旋律<br>
-              5. 關閉檔案<br><br>
-            📌 music.txt 檔案內容（事先準備music.txt 檔案，並在檔案內，貼上以下文字內容，之後存檔）<br>
-            文字內容：<br>
-            E_high D_high E_high D_high E_high B D_high C_high A<br><br>
-            提示（音符對應）：<br>
-            • Mi(高) = E_high = 76<br>
-            • Re(高) = D_high = 74<br>
-            • Si = B = 71<br>
-            • Do(高) = C_high = 72<br>
-            • La = A = 69
-        </p>
-        <pre>參考程式：
+        <div class="example-wrap">
+            <div class="example-head">範例 (二)：播放《給愛麗絲》旋律</div>
+            <div class="example-body">
+                <img src="{{ asset('img/Alice.png') }}" alt="給愛麗絲五線譜">
+                <p>
+                    此行五線譜是《給愛麗絲》的第一句旋律，此行音符為 Mi(高) Re(高) Mi(高) Re(高) Mi(高) Si Re(高) Do(高) La<br><br>
+                    請撰寫一段程式，完成以下功能：
+                </p>
+                <ol>
+                    <li>開啟檔案 music.txt</li>
+                    <li>讀取檔案中的旋律內容</li>
+                    <li>顯示讀取到的旋律</li>
+                    <li>播放《給愛麗絲》第一句旋律</li>
+                    <li>關閉檔案</li>
+                </ol>
+                <div class="hint-block">
+                    <div class="hint-label">前置準備</div>
+                    <p>📌 事先建立 music.txt 檔案，並貼上以下內容後存檔：</p>
+                    <p><code>E_high D_high E_high D_high E_high B D_high C_high A</code></p>
+                    <p>音符對應：Mi(高)=E_high=76　Re(高)=D_high=74　Si=B=71　Do(高)=C_high=72　La=A=69</p>
+                </div>
+                <div class="code-block" style="margin-top:14px">
+                    <div class="code-block-header">
+                        <div class="code-block-dots">
+                            <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                        </div>
+                        <span class="code-block-lang">參考程式</span>
+                    </div>
+                    <pre><span class="hl-kw">import</span> time
+<span class="hl-kw">import</span> pygame.midi
 
-# 匯入套件
-import time
-import pygame.midi
+pygame.midi.<span class="hl-kw">init</span>()
+<span class="hl-nm">player</span> = pygame.midi.<span class="hl-kw">Output</span>(<span class="hl-nu">0</span>)
+player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
 
-# 【初始化 MIDI 音樂系統】
-pygame.midi.init()
-
-# 建立播放器（0 = 預設裝置）
-player = pygame.midi.Output(0)
-
-# 設定樂器為鋼琴
-player.set_instrument(0)
-
-# 音符對照表
-note_map = {
-    "E_high": 76,   # 高音 Mi
-    "D_high": 74,   # 高音 Re
-    "B": 71,        # Si
-    "C_high": 72,   # 高音 Do
-    "A": 69         # La
+<span class="hl-nm">note_map</span> = {
+    <span class="hl-st">"E_high"</span>: <span class="hl-nu">76</span>,   <span class="hl-cm"># 高音 Mi</span>
+    <span class="hl-st">"D_high"</span>: <span class="hl-nu">74</span>,   <span class="hl-cm"># 高音 Re</span>
+    <span class="hl-st">"B"</span>: <span class="hl-nu">71</span>,        <span class="hl-cm"># Si</span>
+    <span class="hl-st">"C_high"</span>: <span class="hl-nu">72</span>,   <span class="hl-cm"># 高音 Do</span>
+    <span class="hl-st">"A"</span>: <span class="hl-nu">69</span>         <span class="hl-cm"># La</span>
 }
 
-# 【第1題】
-# 開啟 music.txt 檔案（讀取模式）
-file = open("music.txt", "r")
+<span class="hl-cm"># 【第1題】開啟檔案（讀取模式）</span>
+<span class="hl-nm">file</span> = <span class="hl-kw">open</span>(<span class="hl-st">"music.txt"</span>, <span class="hl-st">"r"</span>)
 
-# 【第2題】
-# 讀取檔案內容
-data = file.read()
+<span class="hl-cm"># 【第2題】讀取檔案內容</span>
+<span class="hl-nm">data</span> = file.<span class="hl-kw">read</span>()
 
-# 【第3題】
-# 顯示讀取到的旋律內容
-print("讀取到的旋律：")
-print(data)
+<span class="hl-cm"># 【第3題】顯示讀取到的旋律</span>
+<span class="hl-kw">print</span>(<span class="hl-st">"讀取到的旋律："</span>)
+<span class="hl-kw">print</span>(data)
 
-# 將字串切割成串列
-# 例如："E_high D_high E_high" 變成：["E_high", "D_high", "E_high"]
-melody = data.split()
+<span class="hl-cm"># 將字串切割成串列</span>
+<span class="hl-cm"># "E_high D_high ..." → ["E_high", "D_high", ...]</span>
+<span class="hl-nm">melody</span> = data.<span class="hl-kw">split</span>()
+<span class="hl-nm">beat</span> = <span class="hl-nu">0.5</span>
 
-# 設定每個音播放時間
-beat = 0.5
+<span class="hl-cm"># 【第4題】依序播放旋律</span>
+<span class="hl-kw">for</span> note <span class="hl-kw">in</span> melody:
+    <span class="hl-nm">midi_num</span> = note_map[note]
+    player.<span class="hl-kw">note_on</span>(midi_num, <span class="hl-nu">100</span>)
+    time.<span class="hl-kw">sleep</span>(beat)
+    player.<span class="hl-kw">note_off</span>(midi_num, <span class="hl-nu">100</span>)
 
-# 【第4題】
-# 依序播放旋律
-for note in melody:
-    # 將音符名稱轉成 MIDI 數字
-    midi_num = note_map[note]
-    # 開始播放音符
-    player.note_on(midi_num, 100)
-    # 音符持續 0.5 秒
-    time.sleep(beat)
-    # 停止播放音符
-    player.note_off(midi_num, 100)
-
-# 【第5題】
-# 關閉檔案
-file.close()</pre>
-        <p><strong>程式執行結果：</strong></p>
-        <pre>讀取到的旋律：
+<span class="hl-cm"># 【第5題】關閉檔案</span>
+file.<span class="hl-kw">close</span>()</pre>
+                </div>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果</div>
+                    <div class="output-block">讀取到的旋律：
 E_high D_high E_high D_high E_high B D_high C_high A
 
 接著程式會依序播放：
 Mi(高) → Re(高) → Mi(高) → Re(高)
 → Mi(高) → Si → Re(高) → Do(高) → La
 
-也就是《給愛麗絲》的第一句旋律 🎵</pre>
+也就是《給愛麗絲》的第一句旋律 🎵</div>
+                </div>
+            </div>
+        </div>
 
         <h2 id="section5-2">2. 異常處理與模組</h2>
 
@@ -300,46 +312,56 @@ Mi(高) → Re(高) → Mi(高) → Re(高)
             如果沒有處理錯誤，程式可能會直接停止。
         </p>
 
-        <h5>🎵 音樂情境理解</h5>
-        <p>
-            就像音樂播放器：<br>
-            • 如果音樂檔不存在<br>
-            • 或輸入錯誤音符<br><br>
-            播放器可能無法播放。<br>
-            因此我們需要「錯誤處理機制」，讓程式即使發生問題，也不會直接當掉。
-        </p>
+        <div class="music-card">
+            <span class="music-card-icon">🎵</span>
+            <div class="music-card-body">
+                <p class="music-card-title">音樂情境理解</p>
+                <p>就像音樂播放器：<br>
+                • 如果音樂檔不存在<br>
+                • 或輸入錯誤音符<br><br>
+                播放器可能無法播放。<br>
+                因此我們需要「錯誤處理機制」，讓程式即使發生問題，也不會直接當掉。</p>
+            </div>
+        </div>
 
         <h4>(二) try-except 錯誤處理</h4>
-        <p>
-            <strong>基本語法</strong>
-        </p>
-        <pre>try:
+        <p><strong>基本語法</strong></p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-kw">try</span>:
     可能發生錯誤的程式
 
-except:
+<span class="hl-kw">except</span>:
     發生錯誤時執行</pre>
+        </div>
         <p><strong>範例程式</strong></p>
-        <pre>#先執行 try 內的程式。如果try 內的程式執行上都沒有錯誤，能夠正常執行完成，就不會跳到except內執行except區塊的程式碼
-try:
-    num = int(input("請輸入數字: "))
-    print(num)
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-cm"># try 內正常執行完 → 不會跳到 except</span>
+<span class="hl-kw">try</span>:
+    <span class="hl-nm">num</span> = <span class="hl-kw">int</span>(<span class="hl-kw">input</span>(<span class="hl-st">"請輸入數字: "</span>))
+    <span class="hl-kw">print</span>(num)
 
-#如果有發生錯誤的話，才會跳到 except內，顯示"輸入錯誤"訊息
-except:
-    print("輸入錯誤")</pre>
-        <p>
-            邏輯說明：<br>
-            先執行 try 內的程式<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            如果沒有錯誤<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            正常執行完成<br><br>
-            但如果有發生錯誤<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            跳到 except<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            顯示錯誤訊息
-        </p>
+<span class="hl-cm"># 有錯誤才會跳到 except，顯示錯誤訊息</span>
+<span class="hl-kw">except</span>:
+    <span class="hl-kw">print</span>(<span class="hl-st">"輸入錯誤"</span>)</pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>① 先執行 try 內的程式</p>
+            <p>② 如果沒有錯誤 → 正常執行完成</p>
+            <p>③ 如果有發生錯誤 → 跳到 except → 顯示錯誤訊息</p>
+        </div>
 
         <h4>(三) 常見錯誤情況</h4>
         <p>
@@ -348,236 +370,237 @@ except:
             • <strong>找不到檔案</strong>：開啟不存在的檔案
         </p>
 
-        <h5>🎵 音樂情境理解</h5>
-        <p>
-            例如：<br>
-            <code>note = int("Do")</code><br>
-            因為 "Do" 不是數字，所以會發生錯誤。<br>
-            這時可以使用 try-except 避免程式停止。
-        </p>
+        <div class="music-card">
+            <span class="music-card-icon">🎵</span>
+            <div class="music-card-body">
+                <p class="music-card-title">音樂情境理解</p>
+                <p>例如：<code>note = int("Do")</code><br>
+                因為 "Do" 不是數字，所以會發生錯誤。<br>
+                這時可以使用 try-except 避免程式停止。</p>
+            </div>
+        </div>
 
         <h4>(四) 模組（Module）</h4>
         <p>
             模組就是：👉 別人已經寫好的功能工具箱。<br>
-            Python 可以直接匯入使用。<br><br>
-            基本語法：<br>
-            <code>import 模組名稱</code>
+            Python 可以直接匯入使用。
         </p>
-        <p>範例程式:</p>
-        <pre>import time</pre>
-        <p>代表匯入 time 模組。</p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-kw">import</span> time</pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>代表匯入 time 模組，之後就可以使用 time 裡面所有的功能。</p>
+        </div>
 
         <h4>(五) 使用模組功能</h4>
         <p>匯入後，可以使用模組中的功能。如下程式碼：</p>
-        <pre>import time
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-kw">import</span> time
 
-time.sleep(1)</pre>
-        <p>
-            功能說明：<br>
-            <code>sleep(1)</code> 代表程式暫停 1 秒
-        </p>
+time.<span class="hl-kw">sleep</span>(<span class="hl-nu">1</span>)</pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">程式邏輯說明</div>
+            <p><code>sleep(1)</code> 代表程式暫停 1 秒。</p>
+        </div>
 
-        <h5>🎵 音樂情境理解</h5>
-        <p>
-            播放音樂時：<br>
-            <code>time.sleep(0.5)</code><br>
-            代表：🎵 每個音符持續 0.5 秒。<br><br>
-            如果沒有 sleep()：<br>
-            音樂會瞬間播完。
-        </p>
+        <div class="music-card">
+            <span class="music-card-icon">🎵</span>
+            <div class="music-card-body">
+                <p class="music-card-title">音樂情境理解</p>
+                <p>播放音樂時：<code>time.sleep(0.5)</code><br>
+                代表：🎵 每個音符持續 0.5 秒。<br><br>
+                如果沒有 sleep()：音樂會瞬間播完。</p>
+            </div>
+        </div>
 
         <h4>(六) pygame.midi 模組</h4>
         <p>Python 可以使用 pygame.midi 播放音樂。</p>
-        <pre># 匯入模組
-import pygame.midi
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-kw">import</span> pygame.midi
 
-# 初始化 MIDI
-pygame.midi.init()
-
-# 建立播放器
-player = pygame.midi.Output(0)
-
-# 播放音符
-player.note_on(60, 100)
-
-# 停止音符
-player.note_off(60, 100)</pre>
-
-        <h5>📌 MIDI 數字簡單理解</h5>
-        <p>
-            • Do（C） = 60<br>
-            • Re（D） = 62<br>
-            • Mi（E） = 64<br>
-            • Sol（G） = 67
-        </p>
-
-        <h5>📌 程式執行流程圖</h5>
-        <p>
-            try<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            程式是否錯誤？<br>
-            &nbsp;&nbsp;&nbsp;↓<br>
-            是 → except → 顯示錯誤訊息<br>
-            否 → 正常執行原來的程式碼
-        </p>
+pygame.midi.<span class="hl-kw">init</span>()                      <span class="hl-cm"># 初始化 MIDI</span>
+<span class="hl-nm">player</span> = pygame.midi.<span class="hl-kw">Output</span>(<span class="hl-nu">0</span>)         <span class="hl-cm"># 建立播放器</span>
+player.<span class="hl-kw">note_on</span>(<span class="hl-nu">60</span>, <span class="hl-nu">100</span>)               <span class="hl-cm"># 播放音符</span>
+player.<span class="hl-kw">note_off</span>(<span class="hl-nu">60</span>, <span class="hl-nu">100</span>)              <span class="hl-cm"># 停止音符</span></pre>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">MIDI 數字簡單對照</div>
+            <p>Do（C）= 60　　Re（D）= 62　　Mi（E）= 64　　Sol（G）= 67</p>
+        </div>
+        <div class="logic-block">
+            <div class="logic-label">try-except 流程</div>
+            <p>try 執行程式　→　程式是否錯誤？</p>
+            <p>　　是 → except → 顯示錯誤訊息</p>
+            <p>　　否 → 正常執行完成</p>
+        </div>
 
         <hr>
 
         <h3>範例程式說明</h3>
 
-        <h4>範例(一)：輸入錯誤處理練習 🎵</h4>
-        <p>
-            請撰寫一段程式，完成以下功能：<br><br>
-              1. 匯入 pygame.midi 與 time 模組<br>
-              2. 讓使用者輸入一個數字<br>
-              3. 使用 try-except 進行錯誤處理<br>
-              4. 如果輸入正確：<br>
-                • 播放音符 So（G）<br>
-                • 顯示「播放音樂成功」<br>
-              5. 如果輸入錯誤：<br>
-                • 顯示「輸入錯誤，請輸入數字」<br><br>
-            提示（音符對應）<br>
-            • So = G = 67 🎵
-        </p>
-        <pre>參考程式：
+        <div class="example-wrap">
+            <div class="example-head">範例 (一)：輸入錯誤處理練習 🎵</div>
+            <div class="example-body">
+                <p>請撰寫一段程式，完成以下功能：</p>
+                <ol>
+                    <li>匯入 pygame.midi 與 time 模組</li>
+                    <li>讓使用者輸入一個數字</li>
+                    <li>使用 try-except 進行錯誤處理</li>
+                    <li>如果輸入正確：播放音符 So（G）並顯示「播放音樂成功」</li>
+                    <li>如果輸入錯誤：顯示「輸入錯誤，請輸入數字」</li>
+                </ol>
+                <div class="hint-block">
+                    <div class="hint-label">提示</div>
+                    <p>• So = G = 67 🎵</p>
+                </div>
+                <div class="code-block" style="margin-top:14px">
+                    <div class="code-block-header">
+                        <div class="code-block-dots">
+                            <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                        </div>
+                        <span class="code-block-lang">參考程式</span>
+                    </div>
+                    <pre><span class="hl-cm"># 【第1題】匯入模組</span>
+<span class="hl-kw">import</span> time
+<span class="hl-kw">import</span> pygame.midi
 
-# 【第1題】
-# 匯入時間模組
-import time
-# 匯入 MIDI 音樂模組
-import pygame.midi
+pygame.midi.<span class="hl-kw">init</span>()
+<span class="hl-nm">player</span> = pygame.midi.<span class="hl-kw">Output</span>(<span class="hl-nu">0</span>)
+player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
 
-# 初始化 MIDI 系統
-pygame.midi.init()
+<span class="hl-nm">note_map</span> = { <span class="hl-st">"G"</span>: <span class="hl-nu">67</span> }  <span class="hl-cm"># So</span>
 
-# 建立播放器（0 = 預設裝置）
-player = pygame.midi.Output(0)
+<span class="hl-cm"># 【第3題】try-except 錯誤處理</span>
+<span class="hl-kw">try</span>:
+    <span class="hl-cm"># 【第2題】讓使用者輸入數字</span>
+    <span class="hl-nm">num</span> = <span class="hl-kw">int</span>(<span class="hl-kw">input</span>(<span class="hl-st">"請輸入一個數字: "</span>))
 
-# 設定樂器為鋼琴
-player.set_instrument(0)
+    <span class="hl-cm"># 【第4題】播放 So（G）</span>
+    <span class="hl-nm">midi_num</span> = note_map[<span class="hl-st">"G"</span>]
+    player.<span class="hl-kw">note_on</span>(midi_num, <span class="hl-nu">100</span>)
+    time.<span class="hl-kw">sleep</span>(<span class="hl-nu">0.5</span>)
+    player.<span class="hl-kw">note_off</span>(midi_num, <span class="hl-nu">100</span>)
+    <span class="hl-kw">print</span>(<span class="hl-st">"播放音樂成功 🎵"</span>)
 
-# 音符對照表
-note_map = {
-    "G": 67   # So
-}
-
-# 【第3題】
-# 使用 try-except 進行錯誤處理
-try:
-    # 【第2題】
-    # 讓使用者輸入數字
-    # input() 預設為字串，所以使用 int() 轉為整數
-    num = int(input("請輸入一個數字: "))
-
-    # 【第4題】
-    # 取得 So（G）對應的 MIDI 數字
-    midi_num = note_map["G"]
-
-    # 開始播放音符
-    player.note_on(midi_num, 100)
-
-    # 音符持續 0.5 秒
-    time.sleep(0.5)
-
-    # 停止播放音符
-    player.note_off(midi_num, 100)
-
-    # 顯示成功訊息
-    print("播放音樂成功 🎵")
-
-# 【第5題】
-# 如果輸入錯誤（例如輸入文字）
-except:
-    # 顯示錯誤提示
-    print("輸入錯誤，請輸入數字 ❌")</pre>
-        <p><strong>程式執行結果1（若輸入正確）：</strong></p>
-        <pre>請輸入一個數字: 5
+<span class="hl-cm"># 【第5題】輸入錯誤處理</span>
+<span class="hl-kw">except</span>:
+    <span class="hl-kw">print</span>(<span class="hl-st">"輸入錯誤，請輸入數字 ❌"</span>)</pre>
+                </div>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果 1（輸入正確）</div>
+                    <div class="output-block">請輸入一個數字: 5
 播放音樂成功 🎵
-並播放：So（G）</pre>
-        <p><strong>程式執行結果2（若輸入錯誤）：</strong></p>
-        <pre>請輸入一個數字: abc
-輸入錯誤，請輸入數字 ❌</pre>
+並播放：So（G）</div>
+                </div>
+                <div class="output-wrap">
+                    <div class="output-label">執行結果 2（輸入錯誤）</div>
+                    <div class="output-block">請輸入一個數字: abc
+輸入錯誤，請輸入數字 ❌</div>
+                </div>
+            </div>
+        </div>
 
-        <h4>範例(二)：錯誤輸入保護 + 播放《給愛麗絲》🎵</h4>
-        <img src="{{ asset('img/Alice.png') }}" alt="給愛麗絲五線譜">
-        <p>
-            此行五線譜是《給愛麗絲》的第一句旋律，此行音符為Mi(高) Re(高) Mi(高) Re(高) Mi(高) Si Re(高) Do(高) La<br><br>
-            請撰寫一段程式，完成以下功能：<br><br>
-              1. 匯入 time 與 pygame.midi 模組<br>
-              2. 使用 try-except 保護使用者輸入<br>
-              3. 讓使用者輸入一個數字（播放速度）<br>
-              4. 如果輸入正確：<br>
-                • 設定節拍時間（數字 × 0.5）<br>
-                • 播放《給愛麗絲》第一句旋律<br>
-              5. 如果輸入錯誤：<br>
-                • 顯示「輸入錯誤，請輸入數字」<br><br>
-            提示（音符對應）：<br>
-            • Mi(高) = E_high = 76<br>
-            • Re(高) = D_high = 74<br>
-            • Si = B = 71<br>
-            • Do(高) = C_high = 72<br>
-            • La = A = 69
-        </p>
-        <pre>參考程式：
+        <div class="example-wrap">
+            <div class="example-head">範例 (二)：錯誤輸入保護 + 播放《給愛麗絲》🎵</div>
+            <div class="example-body">
+                <img src="{{ asset('img/Alice.png') }}" alt="給愛麗絲五線譜">
+                <p>
+                    此行五線譜是《給愛麗絲》的第一句旋律，此行音符為 Mi(高) Re(高) Mi(高) Re(高) Mi(高) Si Re(高) Do(高) La<br><br>
+                    請撰寫一段程式，完成以下功能：
+                </p>
+                <ol>
+                    <li>匯入 time 與 pygame.midi 模組</li>
+                    <li>使用 try-except 保護使用者輸入</li>
+                    <li>讓使用者輸入一個數字（播放速度）</li>
+                    <li>如果輸入正確：設定節拍時間（數字 × 0.5），並播放《給愛麗絲》第一句旋律</li>
+                    <li>如果輸入錯誤：顯示「輸入錯誤，請輸入數字」</li>
+                </ol>
+                <div class="hint-block">
+                    <div class="hint-label">音符對應</div>
+                    <p>• Mi(高) = E_high = 76　　Re(高) = D_high = 74</p>
+                    <p>• Si = B = 71　　Do(高) = C_high = 72　　La = A = 69</p>
+                </div>
+                <div class="code-block" style="margin-top:14px">
+                    <div class="code-block-header">
+                        <div class="code-block-dots">
+                            <div class="code-block-dot red"></div><div class="code-block-dot yellow"></div><div class="code-block-dot green"></div>
+                        </div>
+                        <span class="code-block-lang">參考程式</span>
+                    </div>
+                    <pre><span class="hl-cm"># 【第1題】匯入模組</span>
+<span class="hl-kw">import</span> time
+<span class="hl-kw">import</span> pygame.midi
 
-# 【第1題】匯入模組（音樂 + 時間控制）
-import time
-import pygame.midi
+pygame.midi.<span class="hl-kw">init</span>()
+<span class="hl-nm">player</span> = pygame.midi.<span class="hl-kw">Output</span>(<span class="hl-nu">0</span>)
+player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
 
-# 初始化 MIDI 系統（讓電腦可以播放音樂）
-pygame.midi.init()
-
-# 建立播放器（0 = 預設音樂裝置）
-player = pygame.midi.Output(0)
-
-# 設定鋼琴音色
-player.set_instrument(0)
-
-# 音符對照表（把文字音符變成電腦可以播放的數字）
-note_map = {
-    "E_high": 76,   # Mi(高)
-    "D_high": 74,   # Re(高)
-    "B": 71,        # Si
-    "C_high": 72,   # Do(高)
-    "A": 69         # La
+<span class="hl-nm">note_map</span> = {
+    <span class="hl-st">"E_high"</span>: <span class="hl-nu">76</span>,   <span class="hl-cm"># Mi(高)</span>
+    <span class="hl-st">"D_high"</span>: <span class="hl-nu">74</span>,   <span class="hl-cm"># Re(高)</span>
+    <span class="hl-st">"B"</span>: <span class="hl-nu">71</span>,        <span class="hl-cm"># Si</span>
+    <span class="hl-st">"C_high"</span>: <span class="hl-nu">72</span>,   <span class="hl-cm"># Do(高)</span>
+    <span class="hl-st">"A"</span>: <span class="hl-nu">69</span>         <span class="hl-cm"># La</span>
 }
 
-# 🎵 給愛麗絲第一句旋律
-melody = ["E_high", "D_high", "E_high", "D_high",
-          "E_high", "B", "D_high", "C_high", "A"]
+<span class="hl-cm"># 給愛麗絲第一句旋律</span>
+<span class="hl-nm">melody</span> = [<span class="hl-st">"E_high"</span>, <span class="hl-st">"D_high"</span>, <span class="hl-st">"E_high"</span>, <span class="hl-st">"D_high"</span>,
+          <span class="hl-st">"E_high"</span>, <span class="hl-st">"B"</span>, <span class="hl-st">"D_high"</span>, <span class="hl-st">"C_high"</span>, <span class="hl-st">"A"</span>]
 
-# 【第2題】使用 try-except 保護輸入錯誤
-try:
-    # 【第3題】讓使用者輸入播放速度
-    num = int(input("請輸入播放速度（數字）: "))
-    # 計算節拍（數字 × 0.5）
-    beat = num * 0.5
-    print("開始播放《給愛麗絲》🎵，節拍為:", beat)
+<span class="hl-cm"># 【第2題】try-except 保護輸入</span>
+<span class="hl-kw">try</span>:
+    <span class="hl-cm"># 【第3題】讓使用者輸入播放速度</span>
+    <span class="hl-nm">num</span> = <span class="hl-kw">int</span>(<span class="hl-kw">input</span>(<span class="hl-st">"請輸入播放速度（數字）: "</span>))
+    <span class="hl-nm">beat</span> = num * <span class="hl-nu">0.5</span>
+    <span class="hl-kw">print</span>(<span class="hl-st">"開始播放《給愛麗絲》🎵，節拍為:"</span>, beat)
 
-    # 【第4題】依序播放旋律
-    for note in melody:
-        # 將音符轉成 MIDI 數字
-        midi_num = note_map[note]
-        # 播放音符
-        player.note_on(midi_num, 100)
-        # 持續播放一段時間
-        time.sleep(beat)
-        # 停止音符
-        player.note_off(midi_num, 100)
+    <span class="hl-cm"># 【第4題】依序播放旋律</span>
+    <span class="hl-kw">for</span> note <span class="hl-kw">in</span> melody:
+        <span class="hl-nm">midi_num</span> = note_map[note]
+        player.<span class="hl-kw">note_on</span>(midi_num, <span class="hl-nu">100</span>)
+        time.<span class="hl-kw">sleep</span>(beat)
+        player.<span class="hl-kw">note_off</span>(midi_num, <span class="hl-nu">100</span>)
 
-# 【第5題】輸入錯誤處理
-except:
-    print("輸入錯誤，請輸入數字 ❌")</pre>
-        <p><strong>程式執行結果1（若正確輸入）：</strong></p>
-        <pre>請輸入播放速度（數字）: 2
+<span class="hl-cm"># 【第5題】輸入錯誤處理</span>
+<span class="hl-kw">except</span>:
+    <span class="hl-kw">print</span>(<span class="hl-st">"輸入錯誤，請輸入數字 ❌"</span>)</pre>
+                </div>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果 1（輸入正確）</div>
+                    <div class="output-block">請輸入播放速度（數字）: 2
 開始播放《給愛麗絲》🎵，節拍為: 1.0
 
 並播放：
 Mi(高) → Re(高) → Mi(高) → Re(高)
-→ Mi(高) → Si → Re(高) → Do(高) → La</pre>
-        <p><strong>程式執行結果2（若錯誤輸入）：</strong></p>
-        <pre>請輸入播放速度（數字）: abc
-輸入錯誤，請輸入數字 ❌</pre>
+→ Mi(高) → Si → Re(高) → Do(高) → La</div>
+                </div>
+                <div class="output-wrap">
+                    <div class="output-label">執行結果 2（輸入錯誤）</div>
+                    <div class="output-block">請輸入播放速度（數字）: abc
+輸入錯誤，請輸入數字 ❌</div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
