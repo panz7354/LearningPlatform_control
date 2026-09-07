@@ -61,22 +61,26 @@
         👉 else 表示：「不然就…」<br>
         程式會根據條件，選擇不同的結果。</p>
 
-        <div class="music-card">
-            <span class="music-card-icon">🎵</span>
-            <div class="music-card-body">
-                <p class="music-card-title">音樂情境小舉例</p>
-                <p>判斷成績是否及格，程式碼如下：</p>
-                <pre><span class="hl-nm">score</span> = <span class="hl-nu">80</span>
+        <p>生活小舉例（判斷成績是否及格），程式碼如下：</p>
+        <div class="code-block">
+            <div class="code-block-header">
+                <div class="code-block-dots">
+                    <div class="code-block-dot red"></div>
+                    <div class="code-block-dot yellow"></div>
+                    <div class="code-block-dot green"></div>
+                </div>
+                <span class="code-block-lang">Python</span>
+            </div>
+            <pre><span class="hl-nm">score</span> = <span class="hl-nu">80</span>
 
-<span class="hl-kw">if</span> score >= <span class="hl-nu">60</span>:
+<span class="hl-kw">if</span> <span class="hl-nm">score</span> >= <span class="hl-nu">60</span>:
     <span class="hl-kw">print</span>(<span class="hl-st">"及格"</span>)
 <span class="hl-kw">else</span>:
     <span class="hl-kw">print</span>(<span class="hl-st">"不及格"</span>)</pre>
-                <div class="logic-block" style="margin-top:10px">
-                    <div class="logic-label">程式邏輯說明</div>
-                    <p>如果：score >= 60 成立，就輸出：及格，否則輸出：不及格。</p>
-                </div>
-            </div>
+        </div>
+        <div class="logic-block" style="margin-top:10px">
+            <div class="logic-label">程式邏輯說明</div>
+            <p>如果：score >= 60 成立，就輸出：及格，否則輸出：不及格。</p>
         </div>
 
         <h4>(三) if / elif / else 條件判斷</h4>
@@ -110,25 +114,6 @@
             　　2️⃣ if 不成立 → 檢查 elif<br>
             　　3️⃣ 都不成立 → 執行 else
         </p>
-
-        <div class="music-card">
-            <span class="music-card-icon">🎵</span>
-            <div class="music-card-body">
-                <p class="music-card-title">音樂情境小舉例</p>
-                <pre><span class="hl-nm">speed</span> = <span class="hl-nu">3</span>
-
-<span class="hl-kw">if</span> speed == <span class="hl-nu">1</span>:
-    <span class="hl-kw">print</span>(<span class="hl-st">"慢速播放 🎵"</span>)
-<span class="hl-kw">elif</span> speed == <span class="hl-nu">2</span>:
-    <span class="hl-kw">print</span>(<span class="hl-st">"正常播放 🎵"</span>)
-<span class="hl-kw">else</span>:
-    <span class="hl-kw">print</span>(<span class="hl-st">"快速播放 🎵"</span>)</pre>
-                <div class="logic-block" style="margin-top:10px">
-                    <div class="logic-label">程式邏輯說明</div>
-                    <p>程式會根據 speed 數字：1 → 慢速、2 → 正常、其他 → 快速，來決定音樂的播放速度。</p>
-                </div>
-            </div>
-        </div>
 
         <hr>
 
@@ -182,14 +167,12 @@
         </div>
 
         <div class="example-wrap">
-            <div class="example-head">範例 (二)：決定是否播放旋律（if-else）</div>
+            <div class="example-head">範例 (二)：判斷會員優惠資格（if-else）</div>
             <div class="example-body">
-                <img src="{{ asset('img/London_Bridge.png') }}" alt="倫敦鐵橋五線譜">
                 <p>
-                    此行五線譜是《倫敦鐵橋》的第一句旋律，此行音符為：So La So Fa Mi Fa So<br><br>
-                    請撰寫一段程式，讓使用者輸入一個整數：<br>
-                    　　• 如果是偶數 → 播放音符 So（G）<br>
-                    　　• 如果是奇數 → 不播放音樂，並顯示【不播放音樂】文字
+                    請撰寫一段程式，讓使用者輸入消費金額：<br>
+                    　　• 如果消費金額可以被 2 整除 → 顯示「符合優惠資格」，並計算九折後的金額<br>
+                    　　• 如果消費金額無法被 2 整除 → 顯示「不符合優惠資格」，並顯示原本的消費金額
                 </p>
                 <div class="code-block" style="margin-top:14px">
                     <div class="code-block-header">
@@ -200,45 +183,43 @@
                         </div>
                         <span class="code-block-lang">參考程式</span>
                     </div>
-                    <pre><span class="hl-cm"># 【前置準備】</span>
-<span class="hl-kw">import</span> time
-<span class="hl-kw">import</span> pygame.midi
+                    <pre><span class="hl-cm"># 【題號1】</span>
+<span class="hl-cm"># 讓使用者輸入消費金額</span>
+<span class="hl-cm"># input() 預設取得的是字串（string）</span>
+<span class="hl-cm"># 使用 int() 將輸入內容轉換成整數（integer）</span>
+<span class="hl-nm">amount</span> = <span class="hl-kw">int</span>(<span class="hl-kw">input</span>(<span class="hl-st">"請輸入消費金額："</span>))
 
-pygame.midi.<span class="hl-kw">init</span>()
-<span class="hl-nm">player</span> = pygame.midi.<span class="hl-kw">Output</span>(<span class="hl-nu">0</span>)
-player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
-
-<span class="hl-nm">note_map</span> = { <span class="hl-st">"G"</span>: <span class="hl-nu">67</span> }
-<span class="hl-nm">beat</span> = <span class="hl-nu">0.5</span>
-
-<span class="hl-cm"># 【題號1】 輸入整數</span>
-<span class="hl-nm">num</span> = <span class="hl-kw">int</span>(<span class="hl-kw">input</span>(<span class="hl-st">"請輸入一個整數: "</span>))
-
-<span class="hl-cm"># 【題號2】 判斷偶數或奇數</span>
-<span class="hl-cm"># % 為取餘數運算，餘數為 0 → 偶數</span>
-<span class="hl-kw">if</span> num % <span class="hl-nu">2</span> == <span class="hl-nu">0</span>:
-    <span class="hl-kw">print</span>(<span class="hl-st">"播放 So（G）🎵"</span>)
-    <span class="hl-nm">midi_num</span> = note_map[<span class="hl-st">"G"</span>]
-    player.<span class="hl-kw">note_on</span>(midi_num, <span class="hl-nu">100</span>)
-    time.<span class="hl-kw">sleep</span>(beat)
-    player.<span class="hl-kw">note_off</span>(midi_num, <span class="hl-nu">100</span>)
+<span class="hl-cm"># 【題號2】</span>
+<span class="hl-cm"># 使用 if-else 判斷消費金額是否可以被 2 整除</span>
+<span class="hl-cm"># % 為取餘數運算</span>
+<span class="hl-cm"># 若 amount 除以 2 的餘數為 0，代表符合條件</span>
+<span class="hl-kw">if</span> <span class="hl-nm">amount</span> % <span class="hl-nu">2</span> == <span class="hl-nu">0</span>:
+    <span class="hl-cm"># 顯示符合優惠資格</span>
+    <span class="hl-kw">print</span>(<span class="hl-st">"符合優惠資格"</span>)
+    <span class="hl-cm"># 計算九折後的金額</span>
+    <span class="hl-nm">discount_amount</span> = <span class="hl-nm">amount</span> * <span class="hl-nu">0.9</span>
+    <span class="hl-cm"># 顯示折扣後金額</span>
+    <span class="hl-kw">print</span>(<span class="hl-st">"折扣後金額為："</span>, <span class="hl-nm">discount_amount</span>)
 <span class="hl-kw">else</span>:
-    <span class="hl-kw">print</span>(<span class="hl-st">"不播放音樂 ❌"</span>)</pre>
+    <span class="hl-cm"># 如果無法被 2 整除</span>
+    <span class="hl-cm"># 則顯示不符合優惠資格</span>
+    <span class="hl-kw">print</span>(<span class="hl-st">"不符合優惠資格"</span>)
+    <span class="hl-cm"># 顯示原本的消費金額</span>
+    <span class="hl-kw">print</span>(<span class="hl-st">"消費金額為："</span>, <span class="hl-nm">amount</span>)</pre>
                 </div>
-                <div class="logic-block">
-                    <div class="logic-label">程式邏輯說明</div>
-                    <p>num % 2 == 0 代表取餘數為 0，表示偶數 → 播放 So（G）。</p>
-                    <p>若為奇數（餘數為 1）→ 直接顯示「不播放音樂」，不執行任何音符。</p>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果（範例一）</div>
+                    <div class="output-block">請輸入消費金額：8
+
+符合優惠資格
+折扣後金額為：7.2</div>
                 </div>
-                <div class="output-wrap">
-                    <div class="output-label">執行結果（偶數輸入）</div>
-                    <div class="output-block">請輸入一個整數: 8
-播放 So（G）🎵</div>
-                </div>
-                <div class="output-wrap">
-                    <div class="output-label">執行結果（奇數輸入）</div>
-                    <div class="output-block">請輸入一個整數: 5
-不播放音樂 ❌</div>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果（範例二）</div>
+                    <div class="output-block">請輸入消費金額：5
+
+不符合優惠資格
+消費金額為：5</div>
                 </div>
             </div>
         </div>
@@ -257,15 +238,6 @@ player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
             　　• 一個一個顯示<br><br>
             就很適合使用 for 迴圈。
         </p>
-
-        <div class="music-card">
-            <span class="music-card-icon">🎵</span>
-            <div class="music-card-body">
-                <p class="music-card-title">音樂情境小舉例</p>
-                <p>如果有一段旋律：🎵 Do → Re → Mi → Fa<br>
-                程式需要：👉 一個一個播放音符，這時就能使用 for 迴圈。</p>
-            </div>
-        </div>
 
         <h4>(二) for 迴圈語法</h4>
         <p>基本語法：</p>
@@ -299,8 +271,8 @@ player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
             </div>
             <pre><span class="hl-nm">melody</span> = [<span class="hl-st">"C"</span>, <span class="hl-st">"D"</span>, <span class="hl-st">"E"</span>]
 
-<span class="hl-kw">for</span> note <span class="hl-kw">in</span> melody:
-    <span class="hl-kw">print</span>(note)</pre>
+<span class="hl-kw">for</span> <span class="hl-nm">note</span> <span class="hl-kw">in</span> <span class="hl-nm">melody</span>:
+    <span class="hl-kw">print</span>(<span class="hl-nm">note</span>)</pre>
         </div>
         <div class="output-wrap">
             <div class="output-label">執行結果</div>
@@ -314,16 +286,7 @@ E</div>
             <p>　　1️⃣ 先取出 "C"，放進變數 note</p>
             <p>　　2️⃣ 再取出 "D"</p>
             <p>　　3️⃣ 再取出 "E"</p>
-            <p>直到所有音符都處理完。</p>
-        </div>
-
-        <div class="music-card">
-            <span class="music-card-icon">🎵</span>
-            <div class="music-card-body">
-                <p class="music-card-title">音樂情境理解</p>
-                <p>如果 melody 是：["C", "D", "E"]，就代表：🎵 Do → Re → Mi<br>
-                for 迴圈會：👉 依序播放每個音符。</p>
-            </div>
+            <p>直到所有資料都處理完。</p>
         </div>
 
         <h4>(三) 索引（index）是什麼？</h4>
@@ -343,7 +306,7 @@ E</div>
         </div>
         <p>對應位置如下：</p>
         <table>
-            <tr><th>位置（index）</th><th>音符</th></tr>
+            <tr><th>位置（index）</th><th>資料</th></tr>
             <tr><td>0</td><td>G</td></tr>
             <tr><td>1</td><td>A</td></tr>
             <tr><td>2</td><td>G</td></tr>
@@ -353,18 +316,6 @@ E</div>
             什麼是 melody[i]？<br>
             melody[i] 代表：👉 使用位置編號，取得對應的資料，就像：用座號找同學。
         </p>
-
-        <div class="music-card">
-            <span class="music-card-icon">🎵</span>
-            <div class="music-card-body">
-                <p class="music-card-title">音樂情境小舉例</p>
-                <p>如果：melody = ["Do", "Re", "Mi"]，那麼：<br>
-                melody[0] 👉 是 Do 🎵<br>
-                melody[1] 👉 是 Re 🎵<br>
-                melody[2] 👉 是 Mi 🎵</p>
-            </div>
-        </div>
-
         <p>範例說明，如下程式碼：</p>
         <div class="code-block">
             <div class="code-block-header">
@@ -376,7 +327,7 @@ E</div>
                 <span class="code-block-lang">Python</span>
             </div>
             <pre><span class="hl-nm">i</span> = <span class="hl-nu">1</span>
-<span class="hl-kw">print</span>(melody[i])</pre>
+<span class="hl-kw">print</span>(<span class="hl-nm">melody</span>[<span class="hl-nm">i</span>])</pre>
         </div>
         <div class="output-wrap">
             <div class="output-label">執行結果</div>
@@ -385,19 +336,12 @@ E</div>
         <div class="logic-block">
             <div class="logic-label">程式邏輯說明</div>
             <p>因為：i = 1，代表取：👉 第 1 個位置。</p>
-            <p>melody[1] 對應的音符是 A，所以輸出：A</p>
-        </div>
-
-        <div class="music-card">
-            <span class="music-card-icon">🎵</span>
-            <div class="music-card-body">
-                <p class="music-card-title">音樂情境理解</p>
-                <p>《倫敦鐵橋》第一句：🎵 So → La → So → Fa → Mi → Fa → So<br>
-                歌詞對應：🎵 London Bridge is falling down</p>
-                <p>for 迴圈就像一位音樂播放器，會按照旋律串列中的順序：<br>
-                　　• 讀取音符 → 播放音符 → 停止音符 → 再播放下一個<br>
-                直到整段旋律播放完成。</p>
-            </div>
+            <table>
+                <tr><th>index</th><th>資料</th></tr>
+                <tr><td>0</td><td>G</td></tr>
+                <tr><td>1</td><td>A</td></tr>
+            </table>
+            <p>所以：melody[1] 會得到：A</p>
         </div>
 
         <hr>
@@ -423,11 +367,18 @@ E</div>
                         </div>
                         <span class="code-block-lang">參考程式</span>
                     </div>
-                    <pre><span class="hl-cm"># 【題號1】 使用 for 迴圈依序印出數字 1 到 5</span>
-<span class="hl-cm"># range(1, 6) 會產生：1、2、3、4、5（不包含 6）</span>
-<span class="hl-kw">for</span> i <span class="hl-kw">in</span> <span class="hl-kw">range</span>(<span class="hl-nu">1</span>, <span class="hl-nu">6</span>):
-    <span class="hl-cm"># 第一次 i=1，第二次 i=2，依此類推</span>
-    <span class="hl-kw">print</span>(i)</pre>
+                    <pre><span class="hl-cm"># 【題號1】</span>
+<span class="hl-cm"># 使用 for 迴圈依序印出數字 1 到 5</span>
+<span class="hl-cm"># range(1, 6) 會產生：1、2、3、4、5</span>
+<span class="hl-cm"># 注意：6 不會被包含進去</span>
+<span class="hl-kw">for</span> <span class="hl-nm">i</span> <span class="hl-kw">in</span> <span class="hl-kw">range</span>(<span class="hl-nu">1</span>, <span class="hl-nu">6</span>):
+    <span class="hl-cm"># i 代表目前迴圈執行到的數字</span>
+    <span class="hl-cm"># 第一次 i = 1</span>
+    <span class="hl-cm"># 第二次 i = 2</span>
+    <span class="hl-cm"># 第三次 i = 3</span>
+    <span class="hl-cm"># 第四次 i = 4</span>
+    <span class="hl-cm"># 第五次 i = 5</span>
+    <span class="hl-kw">print</span>(<span class="hl-nm">i</span>)</pre>
                 </div>
                 <div class="output-wrap" style="margin-top:10px">
                     <div class="output-label">執行結果</div>
@@ -441,12 +392,13 @@ E</div>
         </div>
 
         <div class="example-wrap">
-            <div class="example-head">範例 (二)：使用 for 迴圈播放旋律</div>
+            <div class="example-head">範例 (二)：使用 for 迴圈處理商品訂單</div>
             <div class="example-body">
-                <img src="{{ asset('img/London_Bridge.png') }}" alt="倫敦鐵橋五線譜">
                 <p>
-                    此行五線譜是《倫敦鐵橋》的第一句旋律，此行音符為：So La So Fa Mi Fa So<br>
-                    請撰寫一段程式，使用 for 迴圈播放《倫敦鐵橋》第一句旋律。
+                    請撰寫一段程式，使用 for 迴圈依序處理商品訂單資料。<br><br>
+                    已知訂單中的商品代碼依序為：<br>
+                    　　A → B → A → C → D → C → B<br><br>
+                    請完成程式，使其能夠依序取得每筆商品代碼，並透過商品對照表查詢商品名稱後顯示。
                 </p>
                 <div class="code-block" style="margin-top:14px">
                     <div class="code-block-header">
@@ -458,39 +410,43 @@ E</div>
                         <span class="code-block-lang">參考程式</span>
                     </div>
                     <pre><span class="hl-cm"># 【前置準備】</span>
-<span class="hl-kw">import</span> time
-<span class="hl-kw">import</span> pygame.midi
-
-pygame.midi.<span class="hl-kw">init</span>()
-<span class="hl-nm">player</span> = pygame.midi.<span class="hl-kw">Output</span>(<span class="hl-nu">0</span>)
-player.<span class="hl-kw">set_instrument</span>(<span class="hl-nu">0</span>)
-
-<span class="hl-cm"># 音符對照表：將音符名稱轉換成 MIDI 數值</span>
-<span class="hl-nm">note_map</span> = {
-    <span class="hl-st">"G"</span>: <span class="hl-nu">67</span>,   <span class="hl-cm"># So</span>
-    <span class="hl-st">"A"</span>: <span class="hl-nu">69</span>,   <span class="hl-cm"># La</span>
-    <span class="hl-st">"F"</span>: <span class="hl-nu">65</span>,   <span class="hl-cm"># Fa</span>
-    <span class="hl-st">"E"</span>: <span class="hl-nu">64</span>    <span class="hl-cm"># Mi</span>
+<span class="hl-cm"># 建立商品對照表（Dictionary）</span>
+<span class="hl-cm"># 功能：將商品代碼轉換成商品名稱</span>
+<span class="hl-nm">product_map</span> = {
+    <span class="hl-st">"A"</span>: <span class="hl-st">"筆記型電腦"</span>,
+    <span class="hl-st">"B"</span>: <span class="hl-st">"鍵盤"</span>,
+    <span class="hl-st">"C"</span>: <span class="hl-st">"滑鼠"</span>,
+    <span class="hl-st">"D"</span>: <span class="hl-st">"耳機"</span>
 }
 
-<span class="hl-cm"># 【題號1】 建立旋律串列：So La So Fa Mi Fa So</span>
-<span class="hl-nm">melody</span> = [<span class="hl-st">"G"</span>, <span class="hl-st">"A"</span>, <span class="hl-st">"G"</span>, <span class="hl-st">"F"</span>, <span class="hl-st">"E"</span>, <span class="hl-st">"F"</span>, <span class="hl-st">"G"</span>]
-<span class="hl-nm">beat</span> = <span class="hl-nu">0.5</span>
+<span class="hl-cm"># 【題號1】</span>
+<span class="hl-cm"># 建立訂單串列（List）</span>
+<span class="hl-cm"># 將訂單中的商品代碼依序存入串列</span>
+<span class="hl-nm">orders</span> = [<span class="hl-st">"A"</span>, <span class="hl-st">"B"</span>, <span class="hl-st">"A"</span>, <span class="hl-st">"C"</span>, <span class="hl-st">"D"</span>, <span class="hl-st">"C"</span>, <span class="hl-st">"B"</span>]
 
-<span class="hl-kw">print</span>(<span class="hl-st">"播放《倫敦鐵橋》🎵"</span>)
+<span class="hl-cm"># 顯示提示訊息</span>
+<span class="hl-kw">print</span>(<span class="hl-st">"開始處理訂單"</span>)
 
-<span class="hl-cm"># 【題號2】 使用 for 迴圈依序播放旋律</span>
-<span class="hl-cm"># n 代表目前取出的音符，例如第一次 n = "G"</span>
-<span class="hl-kw">for</span> n <span class="hl-kw">in</span> melody:
-    <span class="hl-nm">midi_num</span> = note_map[n]
-    player.<span class="hl-kw">note_on</span>(midi_num, <span class="hl-nu">100</span>)
-    time.<span class="hl-kw">sleep</span>(beat)
-    player.<span class="hl-kw">note_off</span>(midi_num, <span class="hl-nu">100</span>)</pre>
+<span class="hl-cm"># 【題號2】</span>
+<span class="hl-cm"># 使用 for 迴圈依序處理訂單資料</span>
+<span class="hl-cm"># code 代表目前從 orders 串列中取出的商品代碼</span>
+<span class="hl-kw">for</span> <span class="hl-nm">code</span> <span class="hl-kw">in</span> <span class="hl-nm">orders</span>:
+    <span class="hl-cm"># 根據商品代碼，</span>
+    <span class="hl-cm"># 從 product_map 字典中取得對應的商品名稱</span>
+    <span class="hl-nm">product_name</span> = <span class="hl-nm">product_map</span>[<span class="hl-nm">code</span>]
+    <span class="hl-cm"># 顯示目前處理的商品資料</span>
+    <span class="hl-kw">print</span>(<span class="hl-st">"目前處理的商品："</span>, <span class="hl-nm">product_name</span>)</pre>
                 </div>
-                <div class="logic-block">
-                    <div class="logic-label">程式邏輯說明</div>
-                    <p>for 迴圈每次從 melody 取出一個音符（n）。</p>
-                    <p>透過 note_map[n] 將音符名稱轉成 MIDI 數值，再播放、等待、停止，反覆直到整段旋律完成。</p>
+                <div class="output-wrap" style="margin-top:10px">
+                    <div class="output-label">執行結果</div>
+                    <div class="output-block">開始處理訂單
+目前處理的商品：筆記型電腦
+目前處理的商品：鍵盤
+目前處理的商品：筆記型電腦
+目前處理的商品：滑鼠
+目前處理的商品：耳機
+目前處理的商品：滑鼠
+目前處理的商品：鍵盤</div>
                 </div>
             </div>
         </div>
